@@ -7,8 +7,7 @@ function MeetupItem(props) {
 
   function showDetailsHandler() {
     router.push({
-      pathname: "/meetup",
-      query: { id: props.id },
+      pathname: "/" + props.id,
     });
   }
 

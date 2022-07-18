@@ -1,42 +1,50 @@
-import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
+import { MongoClient } from "mongodb";
+import Head from "next/head";
+import { Fragment } from "react";
 
-const DUMMY_MEETUPS = [
-  {
-    id: 1,
-    title: "Meetup 1",
-    description: "Meetup 1 description",
-    date: "2020-01-01",
-    location: "Meetup 1 location",
-    image: "https://picsum.photos/900/354",
-    address: "Meetup 1 address",
-  },
-  {
-    id: 2,
-    title: "Meetup 2",
-    description: "Meetup 2 description",
-    date: "2020-01-01",
-    location: "Meetup 2 location",
-    image: "https://picsum.photos/800/353",
-    address: "Meetup 2 address",
-  },
-  {
-    id: 3,
-    title: "Meetup 3",
-    description: "Meetup 3 description",
-    date: "2020-01-01",
-    location: "Meetup 3 location",
-    image: "https://picsum.photos/800/355",
-    address: "Meetup 3 address",
-  },
-];
-
-const HomePage = () => {
-  const [loadedMeetups, setLoadedMeetups] = useState([]);
-  useEffect(() => {
-    setLoadedMeetups(DUMMY_MEETUPS);
-  }, []);
-  return <MeetupList meetups={loadedMeetups} />;
+const HomePage = (props) => {
+  return (
+    <Fragment>
+      <Head>
+        <title>Nextjs Meetup</title>
+        <meta name="Next.js Meetup" content="Nextjs Meetup is a meetup for Nextjs developers" />
+      </Head>
+      <MeetupList meetups={props.meetups} />;
+    </Fragment>
+  );
 };
+
+// export async function getServerSideProps(contex) {
+//   // const req = context.req;
+//   // const res = context.res;
+//   return {
+//     props: {
+//       meetups: DUMMY_MEETUPS,
+//     },
+//   };
+// }
+
+export async function getStaticProps() {
+  // fetch data from MongoDB
+  const client = await MongoClient.connect("mongodb+srv://xolmer:SoruicW3Ajk7w7qP@meetup.12cobid.mongodb.net/meetups?retryWrites=true&w=majority");
+  const db = client.db();
+  const collection = db.collection("meetups");
+  const meetups = await collection.find().toArray();
+  client.close();
+
+  return {
+    props: {
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        description: meetup.description,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
+    },
+    revalidate: 1,
+  };
+}
 
 export default HomePage;
