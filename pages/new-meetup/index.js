@@ -23,7 +23,7 @@ const NewMeetup = () => {
         <title>Nextjs Meetup</title>
         <meta name="Next.js Meetup" content="Nextjs Meetup is a meetup for Nextjs developers" />
       </Head>
-      <NewMeetupForm onAddMeetup={addMeetupHandler} />;
+      <NewMeetupForm onAddMeetup={addMeetupHandler} />
     </Fragment>
   );
 };

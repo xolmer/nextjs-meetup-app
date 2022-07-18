@@ -10,7 +10,7 @@ const MeetupDetails = (props) => {
         <title>{props.meetupData.title}</title>
         <meta name="Next.js Meetup" content={`${props.meetupData.title} is a meetup for Nextjs developers`} />
       </Head>
-      <MeetupDetail image={props.meetupData.image} title={props.meetupData.title} address={props.meetupData.address} description={props.meetupData.description} />;
+      <MeetupDetail image={props.meetupData.image} title={props.meetupData.title} address={props.meetupData.address} description={props.meetupData.description} />
     </Fragment>
   );
 };
